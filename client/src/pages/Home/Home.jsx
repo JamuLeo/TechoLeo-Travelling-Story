@@ -50,6 +50,16 @@ const Home = () => {
     }
   };
 
+
+  const handleEdit=(data)=>{
+	setOpenAddEditModal({ isShown: true, type: "edit", data: data })
+  
+  }
+	
+  const handleViewStory = (data) => {
+	setOpenViewModal({ isShown: true, data });
+  };
+
   const updateIsFavourite = async (storyData) => {
     try {
       const response = await axiosInstance.put(`/update-is-favourite/${storyData._id}`, {
@@ -103,7 +113,7 @@ const Home = () => {
             <div className="col-span-full">
               <EmptyCard
                 imgSrc={EmptyImg}
-                message="No stories yet Click the + button !"
+                message="No stories yet Click the + button  !"
                 subMessage="Click the + button to share your first travel experience."
               />
             </div>
@@ -149,15 +159,19 @@ const Home = () => {
         theme="colored"
       />
 
-      <Modal isOpen={openViewModal.isShown} className="model-box">
+      <Modal isOpen={openViewModal.isShown} 
+	  className="model-box">
+
         <ViewTravelStory
-          onClose={() => setOpenViewModal({ isShown: false })}
-          onEditClick={() => {
-            setOpenViewModal({ isShown: false });
-            setOpenAddEditModal({ isShown: true, type: "Edit", data: openViewModal.data });
-          }}
-          onDeleteClick={() => deleteTravelStory(openViewModal.data)}
-          storyInfo={openViewModal.data}
+          onClose={() => 
+			setOpenViewModal(prevState => ({ ...prevState, isShown: false }))}
+		  onEditClick={() => {
+			setOpenViewModal(prevState => ({ ...prevState, isShown: false }));
+			handleEdit(openViewModal.data || null);
+		  }}
+		  onDeleteClick={() => deleteTravelStory(openViewModal.data)}
+		  storyInfo={openViewModal.data || null}
+		  
         />
       </Modal>
 

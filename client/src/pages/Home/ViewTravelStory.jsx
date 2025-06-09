@@ -6,7 +6,7 @@ import { MdAdd, MdClose, MdDeleteOutline, MdUpdate } from "react-icons/md";
 // Alternative to moment.js (Optional)
 // import dayjs from "dayjs";
 
-const ViewTravelStory = ({ storyInfo, onClose, onEditClick, onDeleteClick }) => {
+const ViewTravelStory = ({ storyInfo,onClose,  onEditClick, onDeleteClick }) => {
   // Example with dayjs (replace moment with dayjs)
   // const formattedDate = dayjs(storyInfo?.visitedDate).format("DD MMM YYYY");
 
@@ -45,10 +45,16 @@ const ViewTravelStory = ({ storyInfo, onClose, onEditClick, onDeleteClick }) => 
             </span>
 
             <div className="inline-flex items-center gap-2 text-[13px] text-cyan-600 bg-cyan-200/40 rounded px-2 py-1">
-              <GrMapLocation className="text-sm" />
-              {Array.isArray(storyInfo?.visitedLocation)
-                ? storyInfo.visitedLocation.join(", ")
-                : "No location provided"}
+			<GrMapLocation className="text-sm" />
+               {storyInfo &&
+               storyInfo.visitedLocation.map((item, index) =>
+                storyInfo.visitedLocation.length == index + 1
+                ? `${item}`
+                : `${item},`
+                )
+                }
+
+            
             </div>
           </div>
         </div>
