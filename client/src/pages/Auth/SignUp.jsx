@@ -1,10 +1,11 @@
 
 
  import React, { useState } from 'react'; 
-import { validateEmail } from '../../utils/helper';
+import { validateEmail } from "../../utils/helper";
 import { useNavigate } from "react-router-dom";
 import PasswordInput from '../../components/Input/PasswordInput';
 import axiosInstance from '../../utils/axiosinstance';
+
 
 const SignUp = () => {
   const [name, setName] = useState("");
@@ -17,7 +18,7 @@ const SignUp = () => {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-
+   
     
     if (!name) {
       setError("Please enter your name");
@@ -62,7 +63,7 @@ const SignUp = () => {
       <div className="login-ui-box bg-cyan-200 -bottom-40 right-1/2" />
 
       <div className="container h-auto min-h-screen flex flex-col lg:flex-row items-center justify-center mt-2 px-4 lg:px-20 mx-auto ">
-        <div className="w-full md:w-3/5 lg:w-2/5 h-[40vh] md:h-[60vh] lg:h-[80vh] mb-4 flex items-end bg-login-bg-img bg-cover bg-center rounded-2xl p-4 md:p-6 lg:p-10 z-50">
+        <div className="w-full md:w-3/5 lg:w-2/5 h-[40vh] md:h-[60vh] lg:h-[80vh] mb-4 flex items-end bg-signup-bg-img bg-cover bg-center rounded-2xl p-4 md:p-6 lg:p-10 z-50">
           <div>
             <h4 className="text-3xl lg:text-5xl text-white font-semibold">
               Join the <br /> Adventure

@@ -77,8 +77,8 @@ const AddEditTravelStory = ({ storyInfo, type,
       const response = await axiosInstance.post("/add-travel-story", {
         title,
         story,
-        imageUrl,
         visitedLocation,
+		imageUrl,
         visitedDate: visitedDate ? moment(visitedDate).valueOf() : moment().valueOf(),
       });
 

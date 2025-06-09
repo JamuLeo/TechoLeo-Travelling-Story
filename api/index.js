@@ -13,11 +13,16 @@ const jwt = require("jsonwebtoken");
 const User = require("./models/userModel");
 const TravelStory = require("./models/travelStoryModel");
 
+
+
 mongoose.connect(config.connectionString);
 
 const app = express();
 app.use(express.json());
 app.use(cors({ origin: "*" }));
+// Serve static files
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/assets", express.static(path.join(__dirname, "assets")));
 
 // Create Account
 app.post("/create-account", async (req, res) => {
@@ -134,9 +139,7 @@ app.delete("/delete-image", async (req, res) => {
   }
 });
 
-// Serve static files
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-app.use("/assets", express.static(path.join(__dirname, "assets")));
+
 
 // Add Travel Story
 app.post("/add-travel-story", authenticateToken, async (req, res) => {

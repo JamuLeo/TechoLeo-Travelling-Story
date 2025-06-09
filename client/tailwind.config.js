@@ -13,7 +13,7 @@ export default {
 		  secondary: '#FF5733',  // Define the secondary color here (you can change this value as needed)
 		},
 		backgroundImage: {
-		  'login-bg-img': "url('./src/assets/images/bg-image.jpg')",//ONE CAN PLACE ANOTHER PROPER IMAGE HERE
+		  'login-bg-img': "url('./src/assets/images/signup1-image.jpg')",//ONE CAN PLACE ANOTHER PROPER IMAGE HERE
 		  'signup-bg-img': "url('./src/assets/images/bg-image.jpg')", //ONE CAN PLACE ANOTHER PROPER IMAGE HERE
 		},
 	  },

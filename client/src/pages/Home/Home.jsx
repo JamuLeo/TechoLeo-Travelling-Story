@@ -103,7 +103,7 @@ const Home = () => {
             <div className="col-span-full">
               <EmptyCard
                 imgSrc={EmptyImg}
-                message="No stories yet!"
+                message="No stories yet Click the + button !"
                 subMessage="Click the + button to share your first travel experience."
               />
             </div>

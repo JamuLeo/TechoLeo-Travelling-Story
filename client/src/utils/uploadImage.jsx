@@ -1,14 +1,15 @@
 import axiosInstance from "./axiosinstance";
 
 const uploadImage = async (imageFile) => {
-  const formData = new FormData();  // Corrected capitalization
+  const formData = new FormData();  
 
-  // Append image File to form data
   formData.append("image", imageFile);
 
   try {
     const response = await axiosInstance.post("/image-upload", formData, {
-      // No need to set content-Type header manually
+     headers:{
+		'Content-Type':'multipart/form-data', //set header for file upload
+	 }
     });
 
     return response.data; // Return response data
