@@ -6,6 +6,7 @@ import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+//import EmptyCard from '../../components/Cards/EmptyCard';
 import EmptyCard from '../../components/Cards/EmptyCard';
 import FilterInfoTitle from '../../components/Cards/FilterInfoTitle';
 import TravelStoryCard from '../../components/Cards/TravelStoryCard';
