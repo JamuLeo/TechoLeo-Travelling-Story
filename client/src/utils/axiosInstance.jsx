@@ -21,19 +21,10 @@ axiosInstance.interceptors.request.use(
     return config;
   },
   (error) => {
-    return Promise.reject(error);  // Handle error if the request fails
+    return Promise.reject(error);  
   }
 );
 
-// Optionally, you can add a response interceptor to handle certain response scenarios globally
-// axiosInstance.interceptors.response.use(
-//   (response) => response,
-//   (error) => {
-//     if (error.response && error.response.status === 401) {
-//       // Handle unauthorized error (e.g., redirect to login)
-//     }
-//     return Promise.reject(error);
-//   }
-// );
+
 
 export default axiosInstance;

@@ -12,7 +12,7 @@ import axiosInstance from '../../utils/axiosInstance';
 import { getEmptyCardImg, getEmptyCardMessage } from '../../utils/helper';
 import AddEditTravelStory from './AddEditTravelStory';
 import ViewTravelStory from './ViewTravelStory';
-import EmptyImg from "../../assets/images/add-story.png";
+//import EmptyImg from "../../assets/images/add-story.png";
 
 import EmptyCard from '../../components/Cards/EmptyCard';
 import FilterInfoTitle from '../../components/Cards/FilterInfoTitle';
