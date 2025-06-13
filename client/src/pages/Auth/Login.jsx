@@ -1,105 +1,119 @@
-import React, { useState } from 'react'; 
-import { validateEmail } from "../../utils/helper";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PasswordInput from '../../components/Input/PasswordInput';
-import axiosInstance from '../../utils/axiosinstance';
+import axiosInstance from '../../utils/axiosInstance';
+import { validateEmail } from '../../utils/helper';
 
 const Login = () => {
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+	const [error, setError] = useState(null);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
+	const navigate = useNavigate();
 
-  const navigate = useNavigate();
+	const handleLogin = async (e) => {
+		e.preventDefault();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-	
+		if (!validateEmail(email)) {
+			setError('Please enter a valid email address.');
+			return;
+		}
 
-    if (!validateEmail(email)) {
-      setError("Please enter a valid email address");
-      return;
-    }
-    if (!password) {
-      setError("Please enter a password");
-      return;
-    }
-    setError(""); 
+		if (!password) {
+			setError('Please enter the password.');
+			return;
+		}
+		setError('');
 
-    try {
-      const response = await axiosInstance.post("/login", {
-        email: email,
-        password: password,
-      });
+		// Login API call
+		try {
+			const response = await axiosInstance.post('/login', {
+				email: email,
+				password: password,
+			});
 
-      if (response.data && response.data.accessToken) {
-        localStorage.setItem("token", response.data.accessToken);
-        navigate("/dashboard");
-      }
-    } catch (error) {
-      if (error.response && error.response.data && error.response.data.message) {
-        setError(error.response.data.message);
-      } else {
-        setError("Unexpected error occurred. Please try again.");
-      }
-    }
-  };
+			// Handel successfull login response
+			if (response.data && response.data.accessToken) {
+				localStorage.setItem('token', response.data.accessToken);
+				navigate('/dashboard');
+			}
+		} catch (error) {
+			// Handle login error
+			if (
+				error.response &&
+				error.response.data &&
+				error.response.data.message
+			) {
+				setError(error.response.data.message);
+			} else {
+				setError('An unexpected error occurred. Please try again');
+			}
+		}
+	};
 
-  return (
-    <div className="h-screen bg-cyan-50 overflow-hidden relative">
-      <div className="login-ui-box right-10 -top-40" />
-      <div className="login-ui-box bg-cyan-200 -bottom-40 right-1/2" />
+	return (
+		<div className="h-screen bg-cyan-50 overflow-hidden relative">
+			<div className="login-ui-box right-10 -top-40 hidden lg:block"></div>
+			<div className="login-ui-box bg-cyan-200 -bottom-40 right-1/2 hidden lg:block"></div>
 
-      <div className="container h-auto min-h-screen flex flex-col lg:flex-row items-center justify-center mt-2 px-4 lg:px-20 mx-auto">
-        <div className="w-full md:w-3/5 lg:w-2/5 h-[40vh] md:h-[60vh] lg:h-[80vh] mb-4 flex items-end bg-login-bg-img bg-cover bg-center rounded-2xl p-4 md:p-6 lg:p-10 z-50">
-          <div>
-            <h4 className="text-3xl lg:text-5xl text-white font-semibold">
-              Capture Your <br /> Journeys
-            </h4>
-            <p className="text-sm lg:text-[15px] text-white mt-4 leading-6 pr-2 lg:pr-7">
-              Record your travel experiences and memories in your personal travel journal.
-            </p>
-          </div>
-        </div>
+			<div className="container h-screen flex flex-wrap items-center justify-center px-4 sm:px-8 lg:px-48 mx-auto">
+				<div className="w-full lg:w-2/4 h-[40vh] lg:h-[90vh] flex items-end bg-login-bg-img bg-cover bg-center rounded-lg p-5 lg:p-10 z-50 mb-4 lg:mb-0">
+					<div>
+						<h4 className="text-3xl lg:text-5xl text-white font-semibold leading-tight lg:leading-[58px]">
+							Capture Your <br /> Journeys
+						</h4>
+						<p className="text-sm lg:text-[15px] text-white leading-5 lg:leading-6 mt-2 lg:mt-4 pr-3 lg:pr-7">
+							Record your travel experiences and memories in your personal
+							travel journal.
+						</p>
+					</div>
+				</div>
 
-        <div className="w-full lg:w-2/4 max-w-xl h-auto bg-white rounded-3xl mb-6 relative mt-6 lg:mt-0 lg:ml-12 p-6 lg:p-16 shadow-lg shadow-cyan-200">
-          <form onSubmit={handleLogin}>
-            <h4 className="text-xl lg:text-2xl font-semibold mb-7 text-center">Login</h4>
-			<div className="mb-6">
-            <input
-              type="text"
-              placeholder="Email"
-              className="input-box"
-              value={email}
-              onChange={({ target }) => setEmail(target.value)}
-            />
+				<div className="w-full lg:w-2/4 bg-white rounded-lg lg:rounded-r-lg relative p-8 lg:p-16 shadow-lg shadow-cyan-200/20">
+					<form onSubmit={handleLogin}>
+						<h4 className="text-xl lg:text-2xl text-center font-semibold mb-5 lg:mb-7">
+							Login
+						</h4>
 
-            <PasswordInput
-              value={password}
-              onChange={({ target }) => setPassword(target.value)}
-            />
+						<input
+							type="email"
+							placeholder="Email"
+							className="input-box"
+							value={email}
+							onChange={({ target }) => {
+								setEmail(target.value);
+							}}
+						/>
 
-            {error && <p className="text-red-500 text-sm pb-1">{error}</p>}
+						<PasswordInput
+							value={password}
+							onChange={({ target }) => {
+								setPassword(target.value);
+							}}
+						/>
 
-            <button type="submit" className="btn-primary">
-              LOGIN
-            </button>
-            
-            <p className="text-sm text-slate-500 text-center my-4">Or</p>
-            <button
-              type="submit"
-              className="btn-primary btn-light"
-              onClick={() => navigate("/signup")}
-            >
-              CREATE ACCOUNT
-            </button>
+						{error && <p className="text-red-500 text-xs pb-1">{error}</p>}
+
+						<button type="submit" className="btn-primary">
+							LOGIN
+						</button>
+
+						<p className="text-xs text-slate-500 text-center my-4">Or</p>
+
+						<button
+							type="button"
+							className="btn-primary btn-light"
+							onClick={() => {
+								navigate('/signup');
+							}}
+						>
+							CREATE ACCOUNT
+						</button>
+					</form>
+				</div>
 			</div>
-			
-          </form>
-        </div>
-      </div>
-    </div>
-  );
+		</div>
+	);
 };
 
 export default Login;

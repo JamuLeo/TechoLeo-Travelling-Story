@@ -20,8 +20,8 @@ const ProfileInfo = ({ userInfo, onLogout }) => {
         </p>
 
         <button
-          className="text-xs text-cyan-600 hover:underline hover:text-cyan-800 transition"
-          onClick={onLogout}
+           className="text-xs text-cyan-600 hover:underline hover:text-cyan-800 transition"
+		   onClick={onLogout}
         >
           Logout
         </button>

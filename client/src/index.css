@@ -5,11 +5,10 @@
 @tailwind utilities;
 
 .rdp-root {
-  --rdp-accent-color: #0180CB;
-  --rdp-accent-background-color: #dffbff;
-  --rdp-day_button-border-radius: 8px;
-  --rdp-font-family: 'Poppins', sans-serif;
-  --rdp-selected-font: bold medium var(--rdp-font-family);
+	--rdp-accent-color: #01b0cb;
+	--rdp-accent-background-color: #dffbff;
+	--rdp-day_button-border-radius: 8px;
+	--rdp-selected-font: bold medium var(--rdp-font-family);
 }
 
 @layer base {
@@ -24,59 +23,65 @@
   }
 }
 
-/* ✅ Custom scrollbar styles */
-.scrollbar::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+/* Custom Scrollbar Styling */
+::-webkit-scrollbar {
+	width: 6px;
+	height: 10px;
+	border-radius: 15px; /* Apply border radius */
 }
 
-.scrollbar::-webkit-scrollbar-thumb {
-  background-color: #057c8e;
-  border-radius: 3px;
+::-webkit-scrollbar-thumb {
+	background-color: rgba(5, 124, 142, 0.8); /* Darker shade for thumb */
+	border-radius: 15px; /* Rounded corners for thumb */
+	backdrop-filter: blur(10px); /* Glass effect for thumb */
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Shadow for thumb */
 }
 
-.scrollbar::-webkit-scrollbar-track {
-  background-color: rgb(172, 201, 229);
+::-webkit-scrollbar-track {
+	background-color: rgba(172, 201, 229, 0.5); /* Light color for the track */
+	border-radius: 15px; /* Apply border radius */
+	backdrop-filter: blur(10px); /* Glass effect for track */
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background-color: rgba(5, 124, 142, 1); /* Thumb color darkens on hover */
 }
 
 @layer components {
-  .input-box {
-    @apply w-full text-sm md:text-base bg-cyan-600/5 rounded px-4 md:px-5 py-3 mb-4 outline-none;
-  }
+	.input-box {
+		@apply w-full text-xs lg:text-sm bg-cyan-600/5 rounded px-4 lg:px-5 py-2 lg:py-3 mb-3 lg:mb-4 outline-none;
+	}
 
-  .btn-primary {
-    @apply w-full text-sm md:text-base font-medium text-white bg-cyan-500 shadow-lg shadow-cyan-200/50 px-4 py-2 rounded-full my-1 hover:bg-cyan-100 hover:text-primary;
-  }
+	.login-ui-box {
+		@apply w-60 lg:w-80 h-[300px] lg:h-[450px] rounded-full bg-primary absolute rotate-45;
+	}
 
-  .btn-light {
-    @apply bg-cyan-50 text-primary border border-cyan-200 hover:bg-primary hover:text-white;
-  }
+	.btn-primary {
+		@apply w-full text-xs lg:text-sm font-medium bg-cyan-500 text-white shadow-lg shadow-cyan-200/50 py-2 lg:py-[10px] rounded-full my-1 hover:bg-cyan-100 hover:text-primary;
+	}
 
-  .login-ui-box {
-    @apply w-64 md:w-80 h-[350px] md:h-[450px] rounded-full bg-primary absolute rotate-45;
-  }
+	.btn-light {
+		@apply bg-cyan-50 text-primary font-medium shadow-cyan-100/0 border border-cyan-100 hover:bg-primary hover:text-white;
+	}
 
-  .model-box {
-    @apply w-[90vw] md:w-[70vw] lg:w-[40%] h-[80vh] bg-white rounded-lg mx-auto mt-14 p-4 md:p-5 overflow-y-auto scrollbar z-50;
-  }
+	.icon-btn {
+		@apply text-[22px] text-slate-300 cursor-pointer hover:text-red-500;
+	}
 
-  .scrollable-container {
-    @apply overflow-y-auto scrollbar max-h-screen;
-  }
+	.model-box {
+		@apply w-[80vw] md:w-[40%] h-[80vh] bg-white rounded-lg mx-auto mt-14 p-5   z-50;
+	}
 
-  .icon-btn {
-    @apply text-lg md:text-[22px] text-slate-300 cursor-pointer hover:text-red-500;
-  }
+	.btn-small {
+		@apply flex items-center gap-1 text-xs font-medium bg-cyan-50 text-primary shadow-cyan-100/0 border border-cyan-100 hover:bg-primary hover:text-white rounded px-3 py-[3px];
+	}
 
-  .input-label {
-    @apply text-base md:text-xl text-slate-400;
-  }
+	.btn-delete {
+		@apply bg-rose-50 text-rose-500 shadow-rose-100/0 border border-rose-100 hover:bg-rose-500 hover:text-white;
+	}
 
-  .btn-small {
-    @apply flex items-center gap-1 text-xs md:text-sm font-medium bg-cyan-50 text-primary border border-cyan-200 hover:bg-primary hover:text-white rounded px-3 py-[3px];
-  }
-
-  .btn-delete {
-    @apply bg-rose-50 text-rose-500 border border-rose-100 hover:bg-rose-500 hover:text-white;
-  }
+	.input-label {
+		@apply text-xs text-slate-400;
+	}
 }
+

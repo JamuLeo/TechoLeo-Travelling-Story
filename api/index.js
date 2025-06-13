@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const express = require("express");
 const cors = require("cors");
-const { authenticateToken } = require("./utilities"); // Ensure correct import
+const { authenticateToken } = require("./utilities");
 const upload = require("./multer");
 const fs = require("fs");
 const path = require("path");
@@ -13,16 +13,27 @@ const jwt = require("jsonwebtoken");
 const User = require("./models/userModel");
 const TravelStory = require("./models/travelStoryModel");
 
-
-
-mongoose.connect(config.connectionString);
+mongoose
+  .connect(process.env.MONGO)
+  .then(() => {
+    console.log('Connected to MongoDB!');
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 const app = express();
 app.use(express.json());
 app.use(cors({ origin: "*" }));
-// Serve static files
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/assets", express.static(path.join(__dirname, "assets")));
+
+// Serve frontend static files for deployment
+const __dirnameResolved = path.resolve();
+app.use(express.static(path.join(__dirnameResolved, '/client/dist')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirnameResolved, 'client', 'dist', 'index.html'));
+});
 
 // Create Account
 app.post("/create-account", async (req, res) => {
@@ -139,8 +150,6 @@ app.delete("/delete-image", async (req, res) => {
   }
 });
 
-
-
 // Add Travel Story
 app.post("/add-travel-story", authenticateToken, async (req, res) => {
   const { title, story, visitedLocation, imageUrl, visitedDate } = req.body;
@@ -232,47 +241,72 @@ app.put("/update-is-favourite/:id", authenticateToken, async (req, res) => {
 
 // Edit Travel Story
 app.put("/edit-story/:id", authenticateToken, async (req, res) => {
-	const { id } = req.params;
-	const { title, story, visitedLocation, imageUrl, visitedDate } = req.body;
-	const { userId } = req.user;
-  
-	try {
-	  // Find the story
-	  const travelStory = await TravelStory.findOne({ _id: id, userId });
-  
-	  if (!travelStory) {
-		return res.status(404).json({ error: true, message: "Travel story not found" });
-	  }
-  
-	  // Update fields if provided
-	  if (title) travelStory.title = title;
-	  if (story) travelStory.story = story;
-	  if (visitedLocation) travelStory.visitedLocation = visitedLocation;
-	  if (imageUrl) travelStory.imageUrl = imageUrl;
-	  if (visitedDate) travelStory.visitedDate = new Date(parseInt(visitedDate));
-  
-	  // Save changes
-	  await travelStory.save();
-  
-	  res.status(200).json({ story: travelStory, message: "Story updated successfully" });
-	} catch (error) {
-	  res.status(500).json({ error: true, message: error.message });
-	}
-  });
-  
-
-// Filter Travel Stories by Date Range
-app.get("/travel-stories/filter", authenticateToken, async (req, res) => {
-  const { startDate, endDate } = req.query;
+  const { id } = req.params;
+  const { title, story, visitedLocation, imageUrl, visitedDate } = req.body;
   const { userId } = req.user;
+
+  try {
+    const travelStory = await TravelStory.findOne({ _id: id, userId });
+
+    if (!travelStory) {
+      return res.status(404).json({ error: true, message: "Travel story not found" });
+    }
+
+    if (title) travelStory.title = title;
+    if (story) travelStory.story = story;
+    if (visitedLocation) travelStory.visitedLocation = visitedLocation;
+    if (imageUrl) travelStory.imageUrl = imageUrl;
+    if (visitedDate) travelStory.visitedDate = new Date(parseInt(visitedDate));
+
+    await travelStory.save();
+
+    res.status(200).json({ story: travelStory, message: "Story updated successfully" });
+  } catch (error) {
+    res.status(500).json({ error: true, message: error.message });
+  }
+});
+
+// Search travel stories
+app.get('/search', authenticateToken, async (req, res) => {
+  const { userId } = req.user;
+  const { query } = req.query;
+
+  if (!query) {
+    return res.status(400).json({ error: true, message: 'Search query is required' });
+  }
+
+  try {
+    const searchResults = await TravelStory.find({
+      userId: userId,
+      $or: [
+        { title: { $regex: query, $options: 'i' } },
+        { story: { $regex: query, $options: 'i' } },
+        { visitedLocation: { $regex: query, $options: 'i' } },
+      ],
+    }).sort({ isFavourite: -1 });
+
+    res.status(200).json({ stories: searchResults });
+  } catch (error) {
+    res.status(500).json({ error: true, message: error.message });
+  }
+});
+
+// Filter travel stories by date range
+app.get('/travel-stories/filter', authenticateToken, async (req, res) => {
+  const { userId } = req.user;
+  const { startDate, endDate } = req.query;
+
+  if (!startDate || !endDate) {
+    return res.status(400).json({ error: true, message: 'Start and end dates are required' });
+  }
 
   try {
     const start = new Date(parseInt(startDate));
     const end = new Date(parseInt(endDate));
 
     const filteredStories = await TravelStory.find({
-      userId,
-      visitedDate: { $gte: start, $lte: end }
+      userId: userId,
+      visitedDate: { $gte: start, $lte: end },
     }).sort({ isFavourite: -1 });
 
     res.status(200).json({ stories: filteredStories });

@@ -1,10 +1,11 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-
+import { BrowserRouter as Router, Routes, 
+	Route, 
+	Navigate } from "react-router-dom";
 import React from "react";
 import Login from "./pages/Auth/Login";
 import SignUp from "./pages/Auth/SignUp";
 import Home from "./pages/Home/Home";
-import './index.css';  // Ensure you import the CSS file
+import './index.css'; 
 
 const App = () => {
   return (
@@ -13,38 +14,30 @@ const App = () => {
         <Routes>
           {/* Initial Route, handles redirection based on authentication */}
           <Route path="/" element={<Root />} />
-          
-          {/* Public Routes */}
-          <Route path="/login" element={<Login />} />
+          <Route path="/dashboard" element={<Home />} />
+		  <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          
-          {/* Protected Routes */}
-          <Route path="/dashboard" element={<PrivateRoute><Home /></PrivateRoute>} />
+          <Route path="/signup" element={<SignUp />} />
+          {/* Redirect unknown paths to login */}
+		 <Route path="*" element={<Navigate to="/login" />} />
+         
         </Routes>
       </Router>
     </div>
   );
 };
 
-// Root component for handling initial redirection
+// Define the Root component to handle the initial redirect
 const Root = () => {
-  // Check if token exists in localStorage
-  const isAuthenticated = !!localStorage.getItem("token");
+	// Check if token exists is localstorage
+	const isAuthenticated = !!localStorage.getItem('token');
 
-  // Redirect to dashboard if authenticated, otherwise to login
-  return isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />;
-};
-
-// PrivateRoute component to protect authenticated routes
-const PrivateRoute = ({ children }) => {
-  const isAuthenticated = !!localStorage.getItem("token");
-
-  if (!isAuthenticated) {
-    // Redirect to login if not authenticated
-    return <Navigate to="/login" />;
-  }
-
-  return children; // Render the protected route's children if authenticated
+	// Redirect to dashboard if authenticated, otherwise to login
+	return isAuthenticated ? (
+		<Navigate to="/dashboard" />
+	) : (
+		<Navigate to="/login" />
+	);
 };
 
 export default App;

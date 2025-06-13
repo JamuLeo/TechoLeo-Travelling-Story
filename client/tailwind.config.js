@@ -1,23 +1,22 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-	content: [
-	  './src/**/*.{js,jsx,ts,tsx}',  
-	],
+	content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
 	theme: {
-	  fontFamily: {
-		display: ["Poppins", "sans-serif"],  
-	  },
-	  extend: {
-		colors: {
-		  primary: '#0180CB',  // Define the primary color here
-		  secondary: '#FF5733',  // Define the secondary color here (you can change this value as needed)
+		fontFamily: {
+			display: ['Poppins', 'sans-serif'],
 		},
-		backgroundImage: {
-		  'login-bg-img': "url('./src/assets/images/signup1-image.jpg')",//ONE CAN PLACE ANOTHER PROPER IMAGE HERE
-		  'signup-bg-img': "url('./src/assets/images/bg-image.jpg')", //ONE CAN PLACE ANOTHER PROPER IMAGE HERE
+
+		extend: {
+			// Colors used in Project
+			colors: {
+				primary: '#05B6D3',
+				secondary: '#EF863E',
+			},
+			backgroundImage: {
+				'login-bg-img': "url('./src/assets/images/bg-image.jpg')",
+				'signup-bg-img': "url('./src/assets/images/signup-bg-image.jpg')",
+			},
 		},
-	  },
 	},
-	plugins: [],
-  };
-  
+	
+};

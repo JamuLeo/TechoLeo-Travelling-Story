@@ -1,4 +1,4 @@
-import LOGO from "../assets/images/logo.png";
+import LOGO from "../assets/images/logo.svg";
 import React from 'react';
 import { useNavigate } from 'react-router-dom';  // Import useNavigate
 import ProfileInfo from "./cards/ProfileInfo";
