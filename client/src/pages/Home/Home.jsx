@@ -6,16 +6,17 @@ import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-//import EmptyCard from '../../components/Cards/EmptyCard';
-import EmptyCard from '../../components/Cards/EmptyCard.jsx';
-import FilterInfoTitle from '../../components/Cards/FilterInfoTitle';
-import TravelStoryCard from '../../components/Cards/TravelStoryCard';
+
 import Navbar from '../../components/Navbar';
 import axiosInstance from '../../utils/axiosInstance';
 import { getEmptyCardImg, getEmptyCardMessage } from '../../utils/helper';
 import AddEditTravelStory from './AddEditTravelStory';
 import ViewTravelStory from './ViewTravelStory';
 import EmptyImg from "../../assets/images/add-story.png";
+
+import EmptyCard from '../../components/Cards/EmptyCard';
+import FilterInfoTitle from '../../components/Cards/FilterInfoTitle';
+import TravelStoryCard from '../../components/Cards/TravelStoryCard';
 
 
 const Home = () => {
