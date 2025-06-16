@@ -9,7 +9,7 @@ const upload = require("./multer");
 const fs = require("fs");
 const path = require("path");
 const jwt = require("jsonwebtoken");
-
+const Transaction = require("./models/transactionModel");
 const User = require("./models/userModel");
 const TravelStory = require("./models/travelStoryModel");
 
@@ -29,11 +29,11 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/assets", express.static(path.join(__dirname, "assets")));
 
 // Serve frontend static files for deployment
-const __dirnameResolved = path.resolve();
-app.use(express.static(path.join(__dirnameResolved, '/client/dist')));
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirnameResolved, 'client', 'dist', 'index.html'));
-});
+//const __dirnameResolved = path.resolve();
+//app.use(express.static(path.join(__dirnameResolved, '/client/dist')));
+//app.get('*', (req, res) => {
+ // res.sendFile(path.join(__dirnameResolved, 'client', 'dist', 'index.html'));
+//});
 
 // Create Account
 app.post("/create-account", async (req, res) => {
