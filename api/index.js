@@ -12,6 +12,7 @@ const jwt = require("jsonwebtoken");
 const Transaction = require("./models/transactionModel");
 const User = require("./models/userModel");
 const TravelStory = require("./models/travelStoryModel");
+const axios = require("axios");
 
 mongoose
   .connect(process.env.MONGO)
@@ -314,6 +315,111 @@ app.get('/travel-stories/filter', authenticateToken, async (req, res) => {
     res.status(500).json({ error: true, message: error.message });
   }
 });
+
+ // POST route to start a payment
+app.post("/initialize-payment", authenticateToken, async (req, res) => {
+	const { phoneNumber, email, name, provider, amount } = req.body;
+  
+	try {
+	  // ✅ Step 1: Fetch operators from correct endpoint
+	  const opRes = await axios.get(
+		"https://api.paychangu.com/mobile-money",
+		{
+		  headers: {
+			Authorization: `Bearer ${process.env.PAYCHANGU_SECRET}`,
+		  },
+		}
+	  );
+  
+	  // ✅ Step 2: Find the matching operator (e.g., "Airtel Money", "TNM Mpamba")
+	  const operator = opRes.data.data.find(op =>
+		op.name.toLowerCase().includes(provider.toLowerCase())
+	  );
+  
+	  if (!operator) {
+		return res.status(400).json({
+		  message: `Mobile money operator '${provider}' not found.`,
+		});
+	  }
+  
+	  // ✅ Step 3: Initialize mobile money payment
+	  const initRes = await axios.post(
+		"https://api.paychangu.com/mobile-money/payments/initialize",
+		{
+		  mobile_money_operator_ref_id: operator.ref_id,
+		  mobile: phoneNumber,
+		  amount: amount.toString(),
+		  charge_id: "" + Math.floor(Math.random() * 1e9 + 1),
+		  email,
+		  first_name: name.split(" ")[0] || "",
+		  last_name: name.split(" ")[1] || "",
+		},
+		{
+		  headers: {
+			accept: "application/json",
+			"content-type": "application/json",
+			Authorization: `Bearer ${process.env.PAYCHANGU_SECRET}`,
+		  },
+		}
+	  );
+  
+	  console.log("PayChangu response:", initRes.data);
+	  res.status(200).json({ data: initRes.data });
+	  
+	} catch (err) {
+	  console.error("Error initializing payment:", err.response?.data || err.message);
+	  res.status(500).json({
+		message: "Failed to initialize payment",
+		error: err.response?.data || err.message,
+	  });
+	}
+  });
+  
+  // Route to verify the status of a payment
+app.get("/verify-charge/:chargeId", authenticateToken, async (req, res) => {
+	try {
+	  const { chargeId } = req.params; // Get charge ID from URL
+  
+	  // Send GET request to PayChangu to verify payment
+	  const response = await axios.get(
+		`https://api.paychangu.com/mobile-money/payments/${chargeId}/verify`,
+		{
+		  headers: {
+			accept: "application/json",
+			"content-type": "application/json",
+			Authorization: `Bearer ${process.env.PAYCHANGU_SECRET}`,
+		  },
+		}
+	  );
+  
+	  console.log(response.data); // Show result from PayChangu
+	  res.status(200).json({ data: response?.data }); // Send response to frontend
+	} catch (error) {
+	  res.status(500).json({ message: error });
+	  console.log(error);
+	}
+  });
+  
+  
+  // Route to update the user's payment status
+app.post("/updatePaymentStatus", authenticateToken, async (req, res) => {
+	const { email } = req.body; // Get user’s email from request
+	console.log(email);
+  
+	// Find the user and mark them as paid
+	const updatedUser = await User.findOneAndUpdate(
+	  { email },      // Search by email
+	  { paid: true }, // Set paid = true
+	  { new: true }   // Return updated user
+	);
+  
+	// Save the transaction details in your database
+	const transaction = await new Transaction(req.body);
+	await transaction.save(); // Store it in MongoDB
+  
+	res.status(200).json(updatedUser); // Send updated user back to frontend
+  });
+  
 
 app.listen(8000, () => console.log("Server running on port 8000"));
 module.exports = app;

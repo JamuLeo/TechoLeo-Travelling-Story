@@ -18,12 +18,13 @@ const userSchema = new Schema({
 	createdOn: {
 		type: Date,
 		default: Date.now,
-	},
-	paid:{
-		type:Boolean,
-		required:false,
-		default:false
-	}
+	}, 
+	paid: {
+        type: Boolean,
+        required: false,
+        default: false
+    }
+	
 });
 
 module.exports = mongoose.model('User', userSchema);
