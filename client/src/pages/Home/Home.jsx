@@ -31,6 +31,7 @@ const EmptyCard = ({ imgSrc, message }) => (
   </div>
 );
 
+// Inline version of FilterInfoTitle component
 const FilterInfoTitle = ({ filterType, filterDates, onClear }) => {
 	const DateRangeChip = ({ date }) => {
 		const startDate = date?.from
@@ -64,8 +65,7 @@ const FilterInfoTitle = ({ filterType, filterDates, onClear }) => {
 			)}
 		</div>
 	);
-
-
+};
 
 
 
