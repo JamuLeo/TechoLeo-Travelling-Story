@@ -6,7 +6,7 @@ const path=require("path");
 //storage configuration
 const storage=multer.diskStorage({
     destination:function(req,file,cb){
-        cb(null,"./api/uploads/");//Destination folder for storing uploaded files
+        cb(null,"uploads/");//Destination folder for storing uploaded files
     },
     filename:function(req,file,cb){
         cb(null,Date.now()+path.extname(file.originalname)); //unique filename
