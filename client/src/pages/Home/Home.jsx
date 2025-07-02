@@ -7,6 +7,9 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import { FaHeart } from 'react-icons/fa';
+import { GrMapLocation } from 'react-icons/gr';
+
 import Navbar from '../../components/Navbar';
 import axiosInstance from '../../utils/axiosInstance';
 import { getEmptyCardImg, getEmptyCardMessage } from '../../utils/helper';
@@ -16,7 +19,7 @@ import ViewTravelStory from './ViewTravelStory';
 
 //import EmptyCard from '../../components/Cards/EmptyCard';
 //import FilterInfoTitle from '../../components/Cards/FilterInfoTitle';
-import TravelStoryCard from '../../components/Cards/TravelStoryCard';
+//import TravelStoryCard from '../../components/Cards/TravelStoryCard';
 
 const EmptyCard = ({ imgSrc, message }) => (
   <div className="flex flex-col items-center justify-center mt-20">
@@ -66,6 +69,154 @@ const FilterInfoTitle = ({ filterType, filterDates, onClear }) => {
 		</div>
 	);
 };
+
+
+const TravelStoryCard = ({
+  imgUrl,
+  title,
+  date,
+  story,
+  visitedLocation,
+  isFavourite,
+  onEdit,
+  onClick,
+  onFavouriteToggle,
+}) => {
+  return (
+    <div className="border rounded-lg overflow-hidden bg-white hover:shadow-lg hover:shadow-slate-200 transition-all ease-in-out relative cursor-pointer">
+      <img
+        src={imgUrl}
+        alt={title}
+        className="w-full h-56 object-cover rounded-lg"
+        onClick={onClick}
+      />
+
+      <button
+        className="w-10 h-10 flex items-center justify-center bg-white/40 rounded-lg border border-white/30 absolute top-4 right-4"
+        onClick={onFavouriteToggle}
+      >
+        <FaHeart
+          className={`icon-btn ${isFavourite ? 'text-red-500' : 'text-white'}`}
+        />
+      </button>
+
+      <div className="p-4">
+        <div className="flex items-center gap-3">
+          <div className="flex-1">
+            <h6 className="text-sm font-medium">{title}</h6>
+            <span className="text-xs text-slate-500">
+              {date ? moment(date).format('Do MMM YYYY') : '-'}
+            </span>
+          </div>
+        </div>
+        <p className="text-xs text-slate-600 mt-2">{story?.slice(0, 60)}</p>
+
+        <div className="inline-flex items-center gap-2 text-[13px] text-cyan-600 bg-cyan-200/40 rounded mt-3 px-2 py-1">
+          <GrMapLocation className="text-sm" />
+          {visitedLocation.map((item, index) =>
+            visitedLocation.length === index + 1 ? `${item}` : `${item}, `
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
