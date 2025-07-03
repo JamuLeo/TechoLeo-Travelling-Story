@@ -204,34 +204,35 @@ const AddEditTravelStory = ({
 	const [error, setError] = useState('');
 
 	/* ---------- CRUD HELPERS ---------- */
-	const addNewTravelStory = async () => {
-		try {
-			let imageUrl = '';
-			if (storyImg) {
-				const { imageUrl: url } = await uploadImage(storyImg);
-				imageUrl = url;
-			}
+	const addNewTravelStory=async()=>{
+    try{
+      let imageUrl = ""
+      if(storyImg){
+        const imageUploadRes = await uploadImage(storyImg)
+        imageUrl = imageUploadRes.imageUrl || ""
+      }
+      const response = await axiosInstance.post("/add-travel-story",{
+        title,
+        story,
+        imageUrl:imageUrl || "",
+        visitedLocation,
+        visitedDate:visitedDate ? moment(visitedDate).valueOf():moment().valueOf()
+      })
+      if(response.data && response.data.story){
+        console.log("added story",response.data)
+        toast.success("Story added successfully")
+        getAllTravelStories()
+        onClose()
+      }
 
-			const res = await axiosInstance.post('/add-travel-story', {
-				title,
-				story,
-				imageUrl,
-				visitedLocation,
-				visitedDate: visitedDate
-					? moment(visitedDate).valueOf()
-					: moment().valueOf(),
-			});
-
-			if (res.data?.story) {
-				toast.success('Story added successfully');
-				getAllTravelStories();
-				onClose();
-			}
-		} catch (err) {
-			const msg = err.response?.data?.message || 'Unexpected error.';
-			setError(msg);
-		}
-	};
+    }catch(error){
+      if(error.response && error.response.data && error.response.message){
+        setError(error.response.data.message)
+      }else{
+        setError("Something went wrong")
+      }
+    }
+  }
 
 	const updateTravelStory = async () => {
 		const storyId = storyInfo._id;
