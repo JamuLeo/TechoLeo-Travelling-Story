@@ -7,6 +7,9 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import { FaHeart } from 'react-icons/fa';
+import { GrMapLocation } from 'react-icons/gr';
+
 import Navbar from '../../components/Navbar';
 import axiosInstance from '../../utils/axiosInstance';
 import { getEmptyCardImg, getEmptyCardMessage } from '../../utils/helper';
@@ -14,9 +17,224 @@ import AddEditTravelStory from './AddEditTravelStory';
 import ViewTravelStory from './ViewTravelStory';
 //import EmptyImg from "../../assets/images/add-story.png";
 
-import EmptyCard from '../../components/Cards/EmptyCard';
-import FilterInfoTitle from '../../components/Cards/FilterInfoTitle';
-import TravelStoryCard from '../../components/Cards/TravelStoryCard';
+//import EmptyCard from '../../components/Cards/EmptyCard';
+//import FilterInfoTitle from '../../components/Cards/FilterInfoTitle';
+//import TravelStoryCard from '../../components/Cards/TravelStoryCard';
+
+const EmptyCard = ({ imgSrc, message }) => (
+  <div className="flex flex-col items-center justify-center mt-20">
+    <img
+      src={imgSrc}
+      alt=""
+      className="w-24 flex items-center justify-center bg-cyan-50 rounded-full border border-cyan-100"
+    />
+    <p className="w-1/2 text-sm font-medium text-slate-700 text-center leading-7 mt-5">
+      {message}
+    </p>
+  </div>
+);
+
+// Inline version of FilterInfoTitle component
+const FilterInfoTitle = ({ filterType, filterDates, onClear }) => {
+	const DateRangeChip = ({ date }) => {
+		const startDate = date?.from
+			? moment(date?.from).format('Do MMM YYYY')
+			: 'N/A';
+		const endDate = date?.to ? moment(date?.to).format('Do MMM YYYY') : 'N/A';
+
+		return (
+			<div className="flex items-center gap-2 bg-slate-100 px-3 py-2 my-2 rounded">
+				<p className="text-xs font-medium">
+					{startDate} - {endDate}
+				</p>
+				<button onClick={onClear}>
+					<MdOutlineClose />
+				</button>
+			</div>
+		);
+	};
+
+	if (!filterType) return null;
+
+	return (
+		<div>
+			{filterType === 'search' ? (
+				<h3 className="text-lg font-medium">Search Results</h3>
+			) : (
+				<div className="flex items-center gap-2">
+					<h3 className="text-lg font-medium">Travel Stories from</h3>
+					<DateRangeChip date={filterDates} />
+				</div>
+			)}
+		</div>
+	);
+};
+
+
+const TravelStoryCard = ({
+  imgUrl,
+  title,
+  date,
+  story,
+  visitedLocation,
+  isFavourite,
+  onEdit,
+  onClick,
+  onFavouriteToggle,
+}) => {
+  return (
+    <div className="border rounded-lg overflow-hidden bg-white hover:shadow-lg hover:shadow-slate-200 transition-all ease-in-out relative cursor-pointer">
+      <img
+        src={imgUrl}
+        alt={title}
+        className="w-full h-56 object-cover rounded-lg"
+        onClick={onClick}
+      />
+
+      <button
+        className="w-10 h-10 flex items-center justify-center bg-white/40 rounded-lg border border-white/30 absolute top-4 right-4"
+        onClick={onFavouriteToggle}
+      >
+        <FaHeart
+          className={`icon-btn ${isFavourite ? 'text-red-500' : 'text-white'}`}
+        />
+      </button>
+
+      <div className="p-4">
+        <div className="flex items-center gap-3">
+          <div className="flex-1">
+            <h6 className="text-sm font-medium">{title}</h6>
+            <span className="text-xs text-slate-500">
+              {date ? moment(date).format('Do MMM YYYY') : '-'}
+            </span>
+          </div>
+        </div>
+        <p className="text-xs text-slate-600 mt-2">{story?.slice(0, 60)}</p>
+
+        <div className="inline-flex items-center gap-2 text-[13px] text-cyan-600 bg-cyan-200/40 rounded mt-3 px-2 py-1">
+          <GrMapLocation className="text-sm" />
+          {visitedLocation.map((item, index) =>
+            visitedLocation.length === index + 1 ? `${item}` : `${item}, `
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 const Home = () => {
