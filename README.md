@@ -1,4 +1,6 @@
 live website here:https://mytravelstory.onrender.com
+
+NB:Currently it only support a better interactivity and visibility on large screens eg. laptops ,
 # 🧳 Travel Story
 
 A beautiful and intuitive web application for passionate travelers to share, organize, and preserve their journey memories. Whether it's a weekend getaway or a world tour, **Travel Story** lets you document your adventures with rich storytelling, stunning photos, and interactive maps.
@@ -39,7 +41,7 @@ A beautiful and intuitive web application for passionate travelers to share, org
 
 ## 📸 Screenshots
 
-> *Add screenshots here to visually showcase the UI and experience*
+> screenshots loading
 
 ---
 
